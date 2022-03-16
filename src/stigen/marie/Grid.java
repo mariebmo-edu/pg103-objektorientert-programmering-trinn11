@@ -34,7 +34,7 @@ public class Grid {
     //Printer griden.
     public void printGrid(){
 
-        System.out.println("");
+        System.out.println();
         for(int j=y; j>=0; j--){
 
             //Ser om tallet er større eller mindre enn 10 for å bestemme mellomrom mellom tall og grid
@@ -63,9 +63,9 @@ public class Grid {
             }
 
 
-            System.out.println(currentLine.toString());
-            System.out.println(whiteSpace.toString());
-            System.out.println(whiteSpace.toString());
+            System.out.println(currentLine);
+            System.out.println(whiteSpace);
+            System.out.println(whiteSpace);
 
         }
         System.out.println(printXLine(x));
@@ -102,15 +102,14 @@ public class Grid {
     }
 
     public void drawAllShapes(){
-        for(Map.Entry<String, Shape> s : shapes.entrySet()){
-            if(s instanceof Circle){
-                drawShape((Circle)s);
+        shapes.forEach((k, v) -> {
+            if(v instanceof Circle){
+                drawShape((Circle)v);
             }
-            else if(s instanceof Rectangle){
-                drawShape((Rectangle)s);
+            else if(v instanceof Rectangle){
+                drawShape((Rectangle)v);
             }
-
-        }
+        });
     }
 
     //Draw Shape for rectangles

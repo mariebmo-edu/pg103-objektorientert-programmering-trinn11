@@ -1,33 +1,34 @@
 package stigen.marie;
 
 import java.util.Locale;
-import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Menu {
 
     static Grid grid = new Grid(25, 20);
 
     public static void handleMenu(){
+        initialize();
         Scanner scanner = new Scanner(System.in);
         int userInput = 0;
-        printMenu();
 
         while(userInput != 5){
+            printMenu();
             userInput = Integer.parseInt(scanner.nextLine());
-
             handleUserChoice(userInput);
         }
 
     }
 
     public static void printMenu(){
-        System.out.println("-----MENU------" +
-                "1. Add Shape" +
-                "2. Draw all shapes" +
-                "3. Get shared area of squares" +
-                "4. Move shape" +
-                "5. Exit");
+        System.out.println("""
+                -----MENU------
+                1. Add Shape
+                2. Draw all shapes
+                3. Get shared area of squares
+                4. Move shape
+                5. Exit""");
     }
 
     public static void handleUserChoice(int input){
@@ -73,31 +74,33 @@ public class Menu {
         System.out.println("width/radius: ");
         int width = Integer.parseInt(scanner.nextLine());
 
-        if(type.toLowerCase(Locale.ROOT).equals("rectangle")){
-            System.out.println("height: ");
-            int heigth = Integer.parseInt(scanner.nextLine());
-            Rectangle r = new Rectangle(width, heigth, color, filled.equals("y"), 0, 0);
-
-            grid.addShape(r);
-        } else if (type.toLowerCase(Locale.ROOT).equals("square")){
-            Square s = new Square(width, color, filled.equals("y"), 0, 0);
-            grid.addShape(s);
-        } else if (type.toLowerCase(Locale.ROOT).equals("circle")){
-            Circle c = new Circle(width, color, filled.equals("y"), 0, 0);
-            grid.addShape(c);
-        } else {
-            System.out.println("Something went wrong. Please try again.");
+        switch (type.toLowerCase(Locale.ROOT)) {
+            case "rectangle" -> {
+                System.out.println("height: ");
+                int heigth = Integer.parseInt(scanner.nextLine());
+                Rectangle r = new Rectangle(width, heigth, color, filled.equals("y"), 0, 0);
+                grid.addShape(r);
+            }
+            case "square" -> {
+                Square s = new Square(width, color, filled.equals("y"), 0, 0);
+                grid.addShape(s);
+            }
+            case "circle" -> {
+                Circle c = new Circle(width, color, filled.equals("y"), 0, 0);
+                grid.addShape(c);
+            }
+            default -> System.out.println("Something went wrong. Please try again.");
         }
     }
 
     public static void getAreaOfSquares(){
 
-        double area = 0.0;
-        for(Map.Entry<String, Shape> s : grid.shapes.entrySet()){
-            if(s instanceof Square){
-                area += ((Square) s).getArea();
+        AtomicReference<Double> area = new AtomicReference<>(0.0);
+        grid.shapes.forEach((k, v) -> {
+            if(v instanceof Square){
+                area.updateAndGet(v1 -> v1 + v.getArea());
             }
-        }
+        });
 
         System.out.println("The area of all squares is: " + area);
     }
