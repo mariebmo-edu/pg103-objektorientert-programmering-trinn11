@@ -1,6 +1,9 @@
 package stigen.marie;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class Grid {
 
@@ -9,7 +12,7 @@ public class Grid {
     Cell[][] grid;
     boolean withGrid = true;
 
-    ArrayList<Shape> shapes = new ArrayList<>();
+    HashMap<String, Shape> shapes = new HashMap<>();
 
     public Grid(int x, int y){
         this.x = x;
@@ -31,7 +34,7 @@ public class Grid {
     //Printer griden.
     public void printGrid(){
 
-        System.out.println("");
+        System.out.println();
         for(int j=y; j>=0; j--){
 
             //Ser om tallet er større eller mindre enn 10 for å bestemme mellomrom mellom tall og grid
@@ -60,9 +63,9 @@ public class Grid {
             }
 
 
-            System.out.println(currentLine.toString());
-            System.out.println(whiteSpace.toString());
-            System.out.println(whiteSpace.toString());
+            System.out.println(currentLine);
+            System.out.println(whiteSpace);
+            System.out.println(whiteSpace);
 
         }
         System.out.println(printXLine(x));
@@ -91,19 +94,22 @@ public class Grid {
     }
 
     public void addShape(Shape s){
-        shapes.add(s);
+
+        String uniqueId = UUID.randomUUID().toString();
+
+        shapes.put(uniqueId, s);
+        System.out.println("Shape added! ID: " + uniqueId);
     }
 
     public void drawAllShapes(){
-        for(Shape s : shapes){
-            if(s instanceof Circle){
-                drawShape((Circle)s);
+        shapes.forEach((k, v) -> {
+            if(v instanceof Circle){
+                drawShape((Circle)v);
             }
-            else if(s instanceof Rectangle){
-                drawShape((Rectangle)s);
+            else if(v instanceof Rectangle){
+                drawShape((Rectangle)v);
             }
-
-        }
+        });
     }
 
     //Draw Shape for rectangles
@@ -136,14 +142,6 @@ public class Grid {
                 }
             }
         }
-    }
-
-    public Shape getShape(int index) {
-        return shapes.get(index);
-    }
-
-    public void setShapes(ArrayList<Shape> shapes) {
-        this.shapes = shapes;
     }
 
     private void drawShape(Circle c){
