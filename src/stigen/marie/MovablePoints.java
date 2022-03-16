@@ -10,6 +10,13 @@ public class MovablePoints implements Movable{
         this.x = x;
     }
 
+    public void moveByCoordinates(double up, double down, double left, double right){
+        moveUp(up);
+        moveDown(down);
+        moveLeft(left);
+        moveRight(right);
+    }
+
     @Override
     public void moveUp(double distance) {
         y += distance;

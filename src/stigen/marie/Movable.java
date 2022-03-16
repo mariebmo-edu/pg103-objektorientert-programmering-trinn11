@@ -6,4 +6,5 @@ public interface Movable {
     default void moveDown(double distance){}
     default void moveRight(double distance){}
     default void moveLeft(double distance){}
+    default void moveByCoordinates(double up, double down, double left, double right){}
 }
